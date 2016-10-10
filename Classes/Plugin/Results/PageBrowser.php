@@ -36,7 +36,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PageBrowser
 {
-
     protected $numberOfPages;
     protected $pageParameterName = 'tx_solr[page]';
     protected $currentPage;
@@ -48,7 +47,6 @@ class PageBrowser
     protected $configuration = array();
     protected $labels = array();
     protected $contentObject = null;
-
 
     /**
      * PageBrowser constructor.
@@ -69,7 +67,10 @@ class PageBrowser
         $this->pagesBefore = (int)$configuration['pagesBefore'];
         $this->pagesAfter = (int)$configuration['pagesAfter'];
 
-        $this->template = $this->contentObject->fileResource($configuration['templateFile']);
+        $path = $GLOBALS['TSFE']->tmpl->getFileName($configuration['templateFile']);
+        if ($path !== null && file_exists($path)) {
+            $this->template = file_get_contents($path);
+        }
     }
 
     /**

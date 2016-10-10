@@ -31,12 +31,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * used to fill a Solr document's content field.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class Content
 {
-
     const CONTENT_OBJECT_NAME = 'SOLR_CONTENT';
 
     /**

@@ -26,17 +26,12 @@ namespace ApacheSolrForTypo3\Solr\Plugin\Results;
 
 use ApacheSolrForTypo3\Solr\CommandResolver;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
-use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\Plugin\CommandPluginBase;
-use ApacheSolrForTypo3\Solr\Plugin\PluginAware;
 use ApacheSolrForTypo3\Solr\Plugin\PluginCommand;
 use ApacheSolrForTypo3\Solr\Query;
-use ApacheSolrForTypo3\Solr\Response\Processor\ResponseProcessor;
-use ApacheSolrForTypo3\Solr\Search\QueryAware;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Template;
-use ApacheSolrForTypo3\Solr\Util;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -44,8 +39,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @author Ingo Renner <ingo@typo3.org>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
- * @package TYPO3
- * @subpackage solr
  */
 class Results extends CommandPluginBase
 {
@@ -80,7 +73,7 @@ class Results extends CommandPluginBase
      */
     private function buildSearchRequest()
     {
-        $solrParameters = array();
+        $solrParameters = [];
         $solrPostParameters = GeneralUtility::_POST('tx_solr');
         $solrGetParameters = GeneralUtility::_GET('tx_solr');
 
@@ -148,7 +141,6 @@ class Results extends CommandPluginBase
     protected function getCommandList()
     {
         $requirements = PluginCommand::REQUIREMENT_NONE;
-        $commandList = array();
 
         if ($this->getSearchResultSetService()->getHasSearched()) {
             $requirements = PluginCommand::REQUIREMENT_HAS_SEARCHED;
@@ -160,8 +152,7 @@ class Results extends CommandPluginBase
             }
         }
 
-        $commandList = CommandResolver::getPluginCommands('results', $requirements);
-        return $commandList;
+        return CommandResolver::getPluginCommands('results', $requirements);
     }
 
     /**
@@ -181,7 +172,7 @@ class Results extends CommandPluginBase
      */
     protected function overrideTyposcriptWithFlexformSettings()
     {
-        $flexFormConfiguration = array();
+        $flexFormConfiguration = [];
 
         // initialize with empty query, useful when no search has been
         // conducted yet but needs to show facets already.
@@ -276,7 +267,6 @@ class Results extends CommandPluginBase
 
         return array('prefix' => $this->prefixId, 'query_parameter' => 'q', 'current_url' => $currentUrl, 'q' => $this->getCleanUserQuery());
     }
-
 
     /**
      * Gets the plugin's configuration.

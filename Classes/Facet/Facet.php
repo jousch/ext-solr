@@ -35,11 +35,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class Facet
 {
-
     const TYPE_FIELD = 'field';
     const TYPE_QUERY = 'query';
     const TYPE_RANGE = 'range';
-
 
     /**
      * @var Search
@@ -74,7 +72,6 @@ class Facet
      */
     protected $configuration;
 
-
     /**
      * Constructor.
      *
@@ -106,7 +103,7 @@ class Facet
      * Checks whether an option of the facet has been selected by the user by
      * checking the URL GET parameters.
      *
-     * @return boolean TRUE if any option of the facet is applied, FALSE otherwise
+     * @return bool TRUE if any option of the facet is applied, FALSE otherwise
      */
     public function isActive()
     {
@@ -150,7 +147,7 @@ class Facet
     /**
      * Determines if a facet has any options.
      *
-     * @return boolean TRUE if no facet options are given, FALSE if facet options are given
+     * @return bool TRUE if no facet options are given, FALSE if facet options are given
      */
     public function isEmpty()
     {
@@ -170,9 +167,9 @@ class Facet
     }
 
     /**
-     * Checks whether requirements are fullfilled
+     * Checks whether requirements are fulfilled
      *
-     * @return boolean TRUE if conditions required to render this facet are met, FALSE otherwise
+     * @return bool TRUE if conditions required to render this facet are met, FALSE otherwise
      */
     public function isRenderingAllowed()
     {
@@ -216,7 +213,7 @@ class Facet
      * Evaluates a single facet rendering requirement.
      *
      * @param array $requirement A requirement with keys "name", "facet", and "value".
-     * @return boolean TRUE if the requirement is met, FALSE otherwise.
+     * @return bool TRUE if the requirement is met, FALSE otherwise.
      */
     protected function isRequirementMet(array $requirement)
     {
@@ -271,7 +268,7 @@ class Facet
     /**
      * Gets the number of options for a facet.
      *
-     * @return integer Number of facet options for the current facet.
+     * @return int Number of facet options for the current facet.
      */
     public function getOptionsCount()
     {

@@ -35,8 +35,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * TestCase to check if the index queue can be initialized by the ReIndex Task
  *
  * @author Timo Schmidt
- * @package TYPO3
- * @subpackage solr
  */
 class ReIndexTaskTest extends IntegrationTest
 {
@@ -49,6 +47,14 @@ class ReIndexTaskTest extends IntegrationTest
      * @var Queue
      */
     protected $indexQueue;
+
+    /**
+     * @var array
+     */
+    protected $coreExtensionsToLoad = [
+        'extensionmanager',
+        'scheduler'
+    ];
 
     /**
      * @return void
@@ -92,7 +98,7 @@ class ReIndexTaskTest extends IntegrationTest
     protected function assertIndexQueryContainsItemAmount($amount)
     {
         $this->assertEquals($amount, $this->indexQueue->getAllItemsCount(),
-            'Index queue is empty and was expected to contain '.(int) $amount.' items.');
+            'Index queue is empty and was expected to contain ' . (int) $amount . ' items.');
     }
 
     /**
@@ -140,14 +146,14 @@ class ReIndexTaskTest extends IntegrationTest
         /** @var $indexer \ApacheSolrForTypo3\Solr\IndexQueue\Indexer */
         $indexer = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\IndexQueue\Indexer');
         $indexer->index($items[0]);
-        sleep(2);
+        $this->waitToBeVisibleInSolr();
 
         $this->assertSolrContainsDocumentCount(1);
         $this->task->setSite($site);
         $this->task->setIndexingConfigurationsToReIndex(array('pages'));
         $this->task->execute();
 
-        sleep(2);
+        $this->waitToBeVisibleInSolr();
 
         // after the task was running the solr server should be empty
         $this->assertSolrIsEmpty();

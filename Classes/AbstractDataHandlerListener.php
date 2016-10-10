@@ -28,15 +28,13 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Changes in TYPO3 have an impact on the solr content and are catched
+ * Changes in TYPO3 have an impact on the solr content and are caught
  * by the GarbageCollector and RecordMonitor. Both act as a TCE Main Hook.
  *
- * This base class is used to share functionallity that are needed for both
+ * This base class is used to share functionality that are needed for both
  * to perform the changes in the data handler on the solr index.
  *
  * @author Timo Schmidt <timo.schmidt@dkd.de>
- * @package TYPO3
- * @subpackage solr
  */
 abstract class AbstractDataHandlerListener
 {
@@ -64,7 +62,7 @@ abstract class AbstractDataHandlerListener
     /**
      * When the extend to subpages flag was set, we determine the affected subpages and return them.
      *
-     * @param integer $pageId
+     * @param int $pageId
      * @return array
      */
     protected function getSubPageIds($pageId)
@@ -78,21 +76,21 @@ abstract class AbstractDataHandlerListener
         $treePageIdList = $queryGenerator->getTreeList($pageId, 20, 0, $permissionClause);
         $treePageIds = array_map('intval', explode(',', $treePageIdList));
 
-            // the first one can be ignored because this is the page isself
+            // the first one can be ignored because this is the page itself
         array_shift($treePageIds);
 
         return $treePageIds;
     }
 
     /**
-     * @param integer $pageId
+     * @param int $pageId
      * @param array $changedFields
      * @return bool
      */
     protected function isRecursiveUpdateRequired($pageId, $changedFields)
     {
         $fieldsForCurrentState = $this->getAllRelevantFieldsForCurrentState();
-        $fieldListToRetrieve = implode(",", $fieldsForCurrentState);
+        $fieldListToRetrieve = implode(',', $fieldsForCurrentState);
         $page = BackendUtility::getRecord('pages', $pageId, $fieldListToRetrieve, '', false);
         foreach ($this->getUpdateSubPagesRecursiveTriggerConfiguration() as $configurationName => $triggerConfiguration) {
             $allCurrentStateFieldsMatch = $this->getAllCurrentStateFieldsMatch($triggerConfiguration, $page);

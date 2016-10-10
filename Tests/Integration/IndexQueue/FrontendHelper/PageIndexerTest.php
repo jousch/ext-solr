@@ -24,17 +24,14 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\IndexQueue;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use ApacheSolrForTypo3\Solr\Site;
+use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
 
 /**
  * Testcase to check if we can index page documents using the PageIndexer
  *
  * @author Timo Schmidt
- * @package TYPO3
- * @subpackage solr
  */
 class PageIndexerTest extends IntegrationTest
 {
@@ -58,9 +55,9 @@ class PageIndexerTest extends IntegrationTest
         $this->executePageIndexer();
 
         // we wait to make sure the document will be available in solr
-        sleep(3);
+        $this->waitToBeVisibleInSolr();
 
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
         $this->assertContains('"title":"hello solr"', $solrContent, 'Could not index document into solr');
         $this->assertContains('"sortSubTitle_stringS":"the subtitle"', $solrContent, 'Document does not contain subtitle');
@@ -80,9 +77,9 @@ class PageIndexerTest extends IntegrationTest
         $this->executePageIndexer();
 
         // we wait to make sure the document will be available in solr
-        sleep(3);
+        $this->waitToBeVisibleInSolr();
 
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
 
             // field values from index.queue.pages.fields.
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
@@ -105,7 +102,6 @@ class PageIndexerTest extends IntegrationTest
         $TSFE->config['config']['index_enable'] = 1;
         $TSFE->cObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
         $GLOBALS['TSFE'] = $TSFE;
-
 
         /** @var $request \ApacheSolrForTypo3\Solr\IndexQueue\PageIndexerRequest */
         $request = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\IndexQueue\PageIndexerRequest');

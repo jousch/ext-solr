@@ -27,17 +27,13 @@ namespace ApacheSolrForTypo3\Solr\Plugin;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Plugin command interface
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 interface PluginCommand
 {
-
     const REQUIREMENTS_NUM_BITS = 4;
 
     const REQUIREMENT_NONE = 1; // 0001

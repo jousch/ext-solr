@@ -56,7 +56,6 @@ class LinkBuilder extends Query\LinkBuilder
      */
     protected $facetConfiguration;
 
-
     /**
      * @var string
      */
@@ -82,15 +81,12 @@ class LinkBuilder extends Query\LinkBuilder
 
         $facetLinkUrlParameters = $this->solrConfiguration->getSearchFacetingFacetLinkUrlParameters();
 
-
         if ($facetLinkUrlParameters) {
             $this->addUrlParameters($facetLinkUrlParameters);
         }
     }
 
-
     // adding facet filters
-
 
     /**
      * Creates a link tag to apply a facet option to a search result.
@@ -119,7 +115,7 @@ class LinkBuilder extends Query\LinkBuilder
     }
 
     /**
-     * Retrieves the filter parmeters from the url and adds an additional facet
+     * Retrieves the filter parameters from the url and adds an additional facet
      * option to create a link to apply additional facet options to a
      * search result.
      *
@@ -144,7 +140,6 @@ class LinkBuilder extends Query\LinkBuilder
 
         return $filterParameters;
     }
-
 
     // removing facet filters
 
@@ -203,7 +198,6 @@ class LinkBuilder extends Query\LinkBuilder
 
         return $filterParameters;
     }
-
 
     // replace facet filters
 
@@ -277,7 +271,6 @@ class LinkBuilder extends Query\LinkBuilder
 
         return $filterParameters;
     }
-
 
     // helpers
 

@@ -24,6 +24,8 @@ namespace ApacheSolrForTypo3\Solr\Report;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use ApacheSolrForTypo3\Solr\ConnectionManager;
+use ApacheSolrForTypo3\Solr\SolrService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Reports\Status;
 use TYPO3\CMS\Reports\StatusProviderInterface;
@@ -33,8 +35,6 @@ use TYPO3\CMS\Reports\StatusProviderInterface;
  * whether it fits the recommended version shipping with the extension.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class SchemaStatus implements StatusProviderInterface
 {
@@ -50,7 +50,7 @@ class SchemaStatus implements StatusProviderInterface
      *
      * @var string
      */
-    const RECOMMENDED_SCHEMA_VERSION = 'tx_solr-5-1-0--20160725';
+    const RECOMMENDED_SCHEMA_VERSION = 'tx_solr-6-0-0--20160812';
 
     /**
      * Compiles a collection of schema version checks against each configured
@@ -60,13 +60,21 @@ class SchemaStatus implements StatusProviderInterface
      */
     public function getStatus()
     {
-        $reports = array();
-        $solrConnections = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\ConnectionManager')->getAllConnections();
+        $reports = [];
+        $solrConnections = GeneralUtility::makeInstance(ConnectionManager::class)->getAllConnections();
 
         foreach ($solrConnections as $solrConnection) {
-            if ($solrConnection->ping()
-                && $solrConnection->getSchemaName() != self::RECOMMENDED_SCHEMA_VERSION
-            ) {
+            /** @var $solrConnection SolrService */
+            if (!$solrConnection->ping()) {
+                $url = $solrConnection->__toString();
+                $pingFailedMsg = 'Could not ping solr server, can not check version ' . (string)$url;
+                $status = GeneralUtility::makeInstance(Status::class, 'Apache Solr Version', 'Not accessible', $pingFailedMsg, Status::ERROR);
+                $reports[] = $status;
+                continue;
+            }
+
+            $isWrongSchema = $solrConnection->getSchemaName() != self::RECOMMENDED_SCHEMA_VERSION;
+            if ($isWrongSchema) {
                 $message = '<p style="margin-bottom: 10px;">A schema different
 					from the one provided with the extension was detected.</p>
 					<p style="margin-bottom: 10px;">It is recommended to use the
@@ -84,7 +92,7 @@ class SchemaStatus implements StatusProviderInterface
 					recommended schema version is <strong>'
                     . self::RECOMMENDED_SCHEMA_VERSION . '</strong>. You can
 					find the recommended schema.xml file in the extension\'s
-					resources folder: EXT:solr/Resources/Solr/. While
+					resources folder: EXT:solr/Resources/Private/Solr/. While
 					you\'re at it, please make sure you\'re using the
 					current solrconfig.xml file, too.</p>';
 
@@ -95,7 +103,7 @@ class SchemaStatus implements StatusProviderInterface
                     . '<li>Path: ' . $solrConnection->getPath() . '</li>
 					</ul>';
 
-                $status = GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
+                $status = GeneralUtility::makeInstance(Status::class,
                     'Schema Version',
                     'Unsupported Schema',
                     $message,

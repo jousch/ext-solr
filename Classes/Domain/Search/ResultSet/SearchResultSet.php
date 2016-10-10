@@ -34,8 +34,6 @@ use ApacheSolrForTypo3\Solr\Search;
  * other relevant information, like the used Query and Request objects.
  *
  * @author Timo Schmidt <timo.schmidt@dkd.de>
- * @package TYPO3
- * @subpackage solr
  */
 class SearchResultSet
 {
@@ -61,12 +59,12 @@ class SearchResultSet
     protected $response = null;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $usedPage = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $usedResultsPerPage = 0;
 
@@ -139,7 +137,7 @@ class SearchResultSet
     }
 
     /**
-     * Retrieve the page argument that has beed used to build this SearchResultSet.
+     * Retrieve the page argument that has been used to build this SearchResultSet.
      *
      * @return int
      */

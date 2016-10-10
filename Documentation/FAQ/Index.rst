@@ -146,7 +146,7 @@ Example:
 
 *Use boostFunctions or boostQueries*
 
-For use cases like "*news* are allways more important then *pages*" or "Newer documents should be at the beginning" you can use boostFunctions (:ref:`conf-tx-solr-search-boostFunction`) or boostQueries (:ref:`conf-tx-solr-search-boostQuery`)
+For use cases like "*news* are always more important then *pages*" or "Newer documents should be at the beginning" you can use boostFunctions (:ref:`conf-tx-solr-search-boostFunction`) or boostQueries (:ref:`conf-tx-solr-search-boostQuery`)
 
 *The search term only exists as a synonym*
 
@@ -205,10 +205,10 @@ Put this into your sub vcl_fetch part of the configuration
 
     if (req.http.Cache-Control ~ "no-cache") {
         set beresp.ttl = 0s;
-        #Make sure ESI includes are processed!
+        # Make sure ESI includes are processed!
         esi;
         set beresp.http.X-Cacheable = "NO:force-reload";
-        #Make sure that We remove alle cache headers, so the Browser does not cache it for us!
+        # Make sure that We remove all cache headers, so the Browser does not cache it for us!
         remove beresp.http.Cache-Control;
         remove beresp.http.Expires;
         remove beresp.http.Last-Modified;
@@ -217,3 +217,26 @@ Put this into your sub vcl_fetch part of the configuration
 
           return (deliver);
     }
+
+
+**I want to build the Dockerfile_full image on my mac with a local volume, how can i do that?
+
+|
+
+The following example shows how to build the Dockerfile_full image and start a container with a mapped local volume.
+This was tested with "Docker for Mac" (not Docker Toolbox)
+
+::
+
+    # build the image
+    docker build -t solr-full -f Dockerfile_full .
+
+    # create volume directory locally
+    mkdir -p ~/solrdata
+
+    # add solr group to volume directory
+    sudo chown :8983 ~/solrdata
+
+    # run docker container from image with volume
+    docker run -d -p 127.0.0.1:8282:8983 -v ~/solrdata:/opt/solr/server/solr/data solr-full
+

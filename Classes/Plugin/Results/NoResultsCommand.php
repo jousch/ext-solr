@@ -32,8 +32,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * No Results found view command
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class NoResultsCommand implements PluginCommand
 {
@@ -44,7 +42,6 @@ class NoResultsCommand implements PluginCommand
      * @var Results
      */
     protected $parentPlugin;
-
 
     /**
      * Constructor.
@@ -59,7 +56,7 @@ class NoResultsCommand implements PluginCommand
     public function execute()
     {
         $spellChecker = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\SpellChecker');
-        $suggestionsLink = $spellChecker->getSpellcheckingSuggestions();
+        $suggestionsLink = $spellChecker->getSpellCheckingSuggestions();
 
         $markers = $this->getLabelMarkers();
 

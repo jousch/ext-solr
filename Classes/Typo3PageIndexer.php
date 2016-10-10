@@ -34,8 +34,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * @author Ingo Renner <ingo@typo3.org>
  * @author Daniel Poetzinger <poetzinger@aoemedia.de>
  * @author Timo Schmidt <schmidt@aoemedia.de>
- * @package TYPO3
- * @subpackage solr
  */
 class Typo3PageIndexer
 {
@@ -164,7 +162,7 @@ class Typo3PageIndexer
      * Logs messages to devlog and TS log (admin panel)
      *
      * @param string $message Message to set
-     * @param integer $errorNum Error number
+     * @param int $errorNum Error number
      * @param array $data Additional data to log
      * @return void
      */
@@ -228,7 +226,7 @@ class Typo3PageIndexer
     /**
      * Indexes a page.
      *
-     * @return boolean TRUE after successfully indexing the page, FALSE on error
+     * @return bool TRUE after successfully indexing the page, FALSE on error
      * @throws \UnexpectedValueException if a page document post processor fails to implement interface ApacheSolrForTypo3\Solr\PageDocumentPostProcessor
      */
     public function indexPage()
@@ -317,7 +315,10 @@ class Typo3PageIndexer
         $document->setField('rootline', $rootline);
 
         // access
-        $document->setField('access', (string)$this->pageAccessRootline);
+        $access = (string)$this->pageAccessRootline;
+        if (trim($access) !== "") {
+            $document->setField('access', $access);
+        }
         if ($this->page->page['endtime']) {
             $document->setField('endtime', $pageRecord['endtime']);
         }
@@ -372,7 +373,6 @@ class Typo3PageIndexer
         return $groups;
     }
 
-
     // Logging
     // TODO replace by a central logger
 
@@ -385,7 +385,6 @@ class Typo3PageIndexer
     {
         return $this->mountPointParameter;
     }
-
 
     // Misc
 
@@ -493,7 +492,7 @@ class Typo3PageIndexer
      * Adds the collected documents to the Solr index.
      *
      * @param array $documents An array of \Apache_Solr_Document objects.
-     * @return boolean TRUE if documents were added successfully, FALSE otherwise
+     * @return bool TRUE if documents were added successfully, FALSE otherwise
      */
     protected function addDocumentsToSolrIndex(array $documents)
     {

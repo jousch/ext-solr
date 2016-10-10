@@ -26,8 +26,6 @@ namespace ApacheSolrForTypo3\Solr;
 
 use ApacheSolrForTypo3\Solr\ViewHelper\SubpartViewHelper;
 use ApacheSolrForTypo3\Solr\ViewHelper\ViewHelper;
-use TYPO3\CMS\Core\Html\HtmlParser;
-use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -37,12 +35,9 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * engine supports easy management of markers, subparts, and even loops.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class Template
 {
-
     const CLEAN_TEMPLATE_YES = true;
     const CLEAN_TEMPLATE_NO = false;
 
@@ -106,8 +101,10 @@ class Template
      */
     public function loadHtmlFile($htmlFile)
     {
-        $this->template = $this->cObj->fileResource($htmlFile);
-
+        $path = $GLOBALS['TSFE']->tmpl->getFileName($htmlFile);
+        if ($path !== null && file_exists($path)) {
+            $this->template = file_get_contents($path);
+        }
         if (empty($this->template)) {
             throw new \RuntimeException(
                 'Could not load template file "' . htmlspecialchars($htmlFile) . '"',
@@ -214,7 +211,6 @@ class Template
                 $viewHelperRealPath = substr($viewHelperRealPath, 0, -1);
             }
 
-
             $ucHelperKey = Util::underscoredToUpperCamelCase($helperKey);
             $vendorNameSpace = 'ApacheSolrForTypo3\\Solr\\';
             $possibleFilename = $ucHelperKey . '.php';
@@ -244,7 +240,7 @@ class Template
      *
      * @param $helperName
      * @param ViewHelper $helperObject
-     * @return boolean
+     * @return bool
      */
     public function addViewHelperObject($helperName, ViewHelper $helperObject)
     {
@@ -398,7 +394,6 @@ class Template
             if (array_key_exists(strtolower($helperKey), $this->helpers)) {
                 $helper = $this->helpers[strtolower($helperKey)];
 
-
                 if ($helper instanceof SubpartViewHelper) {
                     $content = $this->renderSubpartViewHelper($helper,
                         $helperKey, $content);
@@ -483,7 +478,6 @@ class Template
             );
 
             $viewHelperArguments = explode('|', $viewHelperArgumentList);
-
 
             $subpartTemplate = clone $this;
             $subpartTemplate->setWorkingTemplateContent($subpart);
@@ -775,7 +769,7 @@ class Template
      * @param string $comparand1 First comparand
      * @param string $comparand2 Second comparand
      * @param string $operator Operator
-     * @return boolean Boolean evaluation of the condition.
+     * @return bool Boolean evaluation of the condition.
      * @throws \InvalidArgumentException for unknown $operator
      */
     protected function evaluateCondition($comparand1, $comparand2, $operator)
@@ -786,22 +780,22 @@ class Template
             case '==':
                 $conditionResult = ($comparand1 == $comparand2);
                 break;
-            case '!=';
+            case '!=':
                 $conditionResult = ($comparand1 != $comparand2);
                 break;
-            case '<';
+            case '<':
                 $conditionResult = ($comparand1 < $comparand2);
                 break;
-            case '<=';
+            case '<=':
                 $conditionResult = ($comparand1 <= $comparand2);
                 break;
-            case '>';
+            case '>':
                 $conditionResult = ($comparand1 > $comparand2);
                 break;
-            case '>=';
+            case '>=':
                 $conditionResult = ($comparand1 >= $comparand2);
                 break;
-            case '%';
+            case '%':
                 $conditionResult = ($comparand1 % $comparand2);
                 break;
             default:
@@ -819,7 +813,7 @@ class Template
 
     /**
      * Resolves variables to marker. Markers can be simple markers like
-     * ###MY_MARKER## or "nested" markers which devide their sub values by a
+     * ###MY_MARKER## or "nested" markers which divide their sub values by a
      * dot: ###MY_MARKER.MY_VALUE### ###MY_MARKER.MY_OTHER_VALUE###.
      *
      * @param array $markers array with markers to resolve
@@ -1057,7 +1051,7 @@ class Template
      *
      * @param string $helperMarker marker name, can be lower case, doesn't need the ### delimiters
      * @param string $subpart subpart markup to search in
-     * @param boolean $removeDuplicates Optionally determines whether duplicate view helpers are removed. Defaults to TRUE.
+     * @param bool $removeDuplicates Optionally determines whether duplicate view helpers are removed. Defaults to TRUE.
      * @return array Array of markers
      */
     protected function getViewHelperArgumentLists($helperMarker, $subpart, $removeDuplicates = true)
@@ -1147,7 +1141,7 @@ class Template
      * Checks whether a given string is a variable marker
      *
      * @param string $potentialVariableMarker String to check whether it is a variable marker
-     * @return boolean TRUE if the string is identified being a variable marker, FALSE otherwise
+     * @return bool TRUE if the string is identified being a variable marker, FALSE otherwise
      */
     public function isVariableMarker($potentialVariableMarker)
     {
@@ -1179,7 +1173,7 @@ class Template
     /**
      * Sets the debug mode on or off.
      *
-     * @param boolean $mode debug mode, TRUE to enable debug mode, FALSE to turn off again, off by default
+     * @param bool $mode debug mode, TRUE to enable debug mode, FALSE to turn off again, off by default
      */
     public function setDebugMode($mode)
     {

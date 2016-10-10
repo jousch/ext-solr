@@ -31,12 +31,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Summary to display flexform settings in the page layout backend module.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class BackendSummary
 {
-
     protected $pluginContentElement = array();
     protected $flexformData = array();
     protected $settings = array();

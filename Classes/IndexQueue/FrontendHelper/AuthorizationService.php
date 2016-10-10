@@ -32,8 +32,6 @@ use TYPO3\CMS\Sv\AbstractAuthenticationService;
  * protected pages.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class AuthorizationService extends AbstractAuthenticationService
 {
@@ -62,7 +60,7 @@ class AuthorizationService extends AbstractAuthenticationService
     }
 
     /**
-     * Authenticates the page indexer frontend user to gratn it access to
+     * Authenticates the page indexer frontend user to grant it access to
      * protected pages and page content.
      *
      * Returns 200 which automatically grants access for the current fake page
@@ -72,7 +70,7 @@ class AuthorizationService extends AbstractAuthenticationService
      *
      * @see \TYPO3\CMS\Core\Authentication\AbstractUserAuthentication::checkAuthentication()
      * @param array Array of user data
-     * @return integer Returns 200 to grant access for the page indexer.
+     * @return int Returns 200 to grant access for the page indexer.
      */
     public function authUser($user)
     {

@@ -1059,7 +1059,7 @@ faceting.facets.[facetName].type
 :TS Path: plugin.tx_solr.search.faceting.facets.[facetName].type
 :Since: 2.0
 
-Defines the type of the facet. By default all facets will render their facet options as a list. PHP Classes can be regsitered to add new types. Using this setting will allow you to use such a type and then have the facet's options rendered and processed by the registered PHP class.
+Defines the type of the facet. By default all facets will render their facet options as a list. PHP Classes can be registered to add new types. Using this setting will allow you to use such a type and then have the facet's options rendered and processed by the registered PHP class.
 
 faceting.facets.[facetName].[type]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1273,6 +1273,8 @@ variants.variantField
 ~~~~~~~~~~~~~~~~~~~~~
 
 Used to expand the document variants to the document.variants property.
+
+**Note:**: The field must be a numeric field or a string field! Not a text field!
 
 :Type: String
 :TS Path: plugin.tx_solr.search.variants.variantField

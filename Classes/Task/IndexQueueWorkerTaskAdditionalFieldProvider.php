@@ -34,8 +34,6 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
  * Additional field provider for the index queue worker task
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class IndexQueueWorkerTaskAdditionalFieldProvider implements AdditionalFieldProviderInterface
 {
@@ -79,14 +77,14 @@ class IndexQueueWorkerTaskAdditionalFieldProvider implements AdditionalFieldProv
         );
 
         $additionalFields['documentsToIndexLimit'] = array(
-            'code' => '<input type="text" name="tx_scheduler[documentsToIndexLimit]" value="' . htmlspecialchars($taskInfo['documentsToIndexLimit']) . '" />',
+            'code' => '<input type="number" class="form-control" name="tx_scheduler[documentsToIndexLimit]" value="' . htmlspecialchars($taskInfo['documentsToIndexLimit']) . '" />',
             'label' => 'LLL:EXT:solr/Resources/Private/Language/locallang.xlf:indexqueueworker_field_documentsToIndexLimit',
             'cshKey' => '',
             'cshLabel' => ''
         );
 
         $additionalFields['forcedWebRoot'] = array(
-            'code' => '<input type="text" name="tx_scheduler[forcedWebRoot]" value="' . htmlspecialchars($taskInfo['forcedWebRoot']) . '" />',
+            'code' => '<input type="text" class="form-control" name="tx_scheduler[forcedWebRoot]" value="' . htmlspecialchars($taskInfo['forcedWebRoot']) . '" />',
             'label' => 'LLL:EXT:solr/Resources/Private/Language/locallang.xlf:indexqueueworker_field_forcedWebRoot',
             'cshKey' => '',
             'cshLabel' => ''
@@ -101,7 +99,7 @@ class IndexQueueWorkerTaskAdditionalFieldProvider implements AdditionalFieldProv
      *
      * @param array $submittedData reference to the array containing the data submitted by the user
      * @param SchedulerModuleController $schedulerModule reference to the calling object (Scheduler's BE module)
-     * @return boolean True if validation was ok (or selected class is not relevant), FALSE otherwise
+     * @return bool True if validation was ok (or selected class is not relevant), FALSE otherwise
      */
     public function validateAdditionalFields(
         array &$submittedData,

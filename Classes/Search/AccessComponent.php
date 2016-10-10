@@ -31,8 +31,6 @@ use ApacheSolrForTypo3\Solr\Util;
  * Access search component
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class AccessComponent extends AbstractComponent implements QueryAware
 {
@@ -44,11 +42,8 @@ class AccessComponent extends AbstractComponent implements QueryAware
      */
     protected $query;
 
-
     /**
      * Initializes the search component.
-     *
-     *
      */
     public function initializeSearchComponent()
     {

@@ -30,8 +30,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Index Queue Page Indexer request with details about which actions to perform.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class PageIndexerRequest
 {
@@ -172,7 +170,7 @@ class PageIndexerRequest
                     'request url' => $url,
                     'request headers' => $headers,
                     'response headers' => $http_response_header,
-                    // automagically defined by file_get_contents()
+                    // automatically defined by file_get_contents()
                     'raw response body' => $rawResponse,
                 )
             );
@@ -252,7 +250,7 @@ class PageIndexerRequest
      * Checks whether this is a legitimate request coming from the Index Queue
      * page indexer worker task.
      *
-     * @return boolean TRUE if it's a legitimate request, FALSE otherwise.
+     * @return bool TRUE if it's a legitimate request, FALSE otherwise.
      */
     public function isAuthenticated()
     {

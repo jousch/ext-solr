@@ -32,8 +32,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * requested by them.
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class PageIndexerRequestHandler implements SingletonInterface
 {
@@ -103,7 +101,7 @@ class PageIndexerRequestHandler implements SingletonInterface
 
         // register shutdown method here instead of in ext_localconf.php to
         // allow frontend helpers to execute at hook_eofe in
-        // tslib/class.tslib_fe.php before shuting down
+        // tslib/class.tslib_fe.php before shutting down
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_eofe'][__CLASS__] = '&ApacheSolrForTypo3\\Solr\\IndexQueue\\PageIndexerRequestHandler->shutdown';
     }
 

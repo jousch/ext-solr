@@ -24,7 +24,6 @@ namespace ApacheSolrForTypo3\Solr\ContentObject;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use ApacheSolrForTypo3\Solr\Util;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -43,12 +42,9 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * removeDuplicateValues: Removes duplicate values
  *
  * @author Ingo Renner <ingo@typo3.org>
- * @package TYPO3
- * @subpackage solr
  */
 class Relation
 {
-
     const CONTENT_OBJECT_NAME = 'SOLR_RELATION';
 
     /**
@@ -57,7 +53,6 @@ class Relation
      * @var array
      */
     protected $configuration = array();
-
 
     /**
      * Constructor.
@@ -153,7 +148,7 @@ class Relation
      * Gets the related items from a table using a n:m relation.
      *
      * @param string $localTableName Local table name
-     * @param integer $localRecordUid Local record uid
+     * @param int $localRecordUid Local record uid
      * @param array $localFieldTca The local table's TCA
      * @return array Array of related items, values already resolved from related records
      */
@@ -271,7 +266,7 @@ class Relation
      * Gets the related items from a table using a 1:n relation.
      *
      * @param string $localTableName Local table name
-     * @param integer $localRecordUid Local record uid
+     * @param int $localRecordUid Local record uid
      * @param array $localFieldTca The local table's TCA
      * @param ContentObjectRenderer $parentContentObject parent content object
      * @return array Array of related items, values already resolved from related records
@@ -290,8 +285,8 @@ class Relation
             /** @var $relationHandler \TYPO3\CMS\Core\Database\RelationHandler */
         $relationHandler = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Database\\RelationHandler');
 
-        $itemList = isset($parentContentObject->data[$foreignTableLabelField]) ?
-                        $parentContentObject->data[$foreignTableLabelField] : '';
+        $itemList = isset($parentContentObject->data[$this->configuration['localField']]) ?
+                        $parentContentObject->data[$this->configuration['localField']] : '';
 
         $relationHandler->start($itemList, $foreignTableName, '', $localRecordUid, $localTableName, $localFieldTca['config']);
         $selectUids = $relationHandler->tableArray[$foreignTableName];
@@ -379,14 +374,13 @@ class Relation
         return $value;
     }
 
-
     /**
      * When the record has an overlay we retrieve the uid of the translated record,
      * to resolve the relations from the translation.
      *
      * @param string $localTableName
-     * @param integer $localRecordUid
-     * @return integer
+     * @param int $localRecordUid
+     * @return int
      */
     protected function getUidOfRecordOverlay($localTableName, $localRecordUid)
     {

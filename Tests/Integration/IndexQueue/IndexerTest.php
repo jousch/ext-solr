@@ -27,18 +27,12 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\IndexQueue;
 use ApacheSolrForTypo3\Solr\IndexQueue\Indexer;
 use ApacheSolrForTypo3\Solr\IndexQueue\Queue;
 use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
-use ApacheSolrForTypo3\Solr\IndexQueue\RecordMonitor;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Charset\CharsetConverter;
-use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Testcase for the record indexer
  *
  * @author Timo Schmidt
- * @package TYPO3
- * @subpackage solr
  */
 class IndexerTest extends IntegrationTest
 {
@@ -92,8 +86,8 @@ class IndexerTest extends IntegrationTest
         $this->assertTrue($result, 'Indexing was not indicated to be successful');
 
         // do we have the record in the index with the value from the mm relation?
-        sleep(3);
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $this->waitToBeVisibleInSolr();
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
 
         $this->assertContains('"category_stringM":["the tag"]', $solrContent, 'Did not find MM related tag');
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
@@ -120,8 +114,8 @@ class IndexerTest extends IntegrationTest
         $this->assertTrue($result, 'Indexing was not indicated to be successful');
 
         // do we have the record in the index with the value from the mm relation?
-        sleep(3);
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $this->waitToBeVisibleInSolr();
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
 
         $this->assertContains('"category_stringM":["translated tag"]', $solrContent, 'Did not find MM related tag');
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
@@ -148,8 +142,8 @@ class IndexerTest extends IntegrationTest
         $this->assertTrue($result, 'Indexing was not indicated to be successful');
 
         // do we have the record in the index with the value from the mm relation?
-        sleep(3);
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $this->waitToBeVisibleInSolr();
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
 
         $this->assertContains('"category_stringM":["another tag"]', $solrContent, 'Did not find MM related tag');
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
@@ -176,8 +170,8 @@ class IndexerTest extends IntegrationTest
         $this->assertTrue($result, 'Indexing was not indicated to be successful');
 
         // do we have the record in the index with the value from the mm relation?
-        sleep(3);
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $this->waitToBeVisibleInSolr();
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
 
         $this->assertContains('"category_stringM":["the category"]', $solrContent, 'Did not find direct related category');
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
@@ -205,8 +199,8 @@ class IndexerTest extends IntegrationTest
         $this->assertTrue($result, 'Indexing was not indicated to be successful');
 
         // do we have the record in the index with the value from the mm relation?
-        sleep(3);
-        $solrContent = file_get_contents('http://localhost:8080/solr/core_en/select?q=*:*');
+        $this->waitToBeVisibleInSolr();
+        $solrContent = file_get_contents('http://localhost:8999/solr/core_en/select?q=*:*');
 
         $this->assertContains('"category_stringM":["another category"]', $solrContent, 'Did not find direct related category');
         $this->assertContains('"numFound":1', $solrContent, 'Could not index document into solr');
@@ -214,11 +208,9 @@ class IndexerTest extends IntegrationTest
         $this->cleanUpSolrServerAndAssertEmpty();
     }
 
-
-
     /**
      * @param string $table
-     * @param integer $uid
+     * @param int $uid
      * @return \Apache_Solr_Response
      */
     protected function addToQueueAndIndexRecord($table, $uid)
